@@ -1,0 +1,19 @@
+package com.utilread.meterreading.repository;
+
+import com.utilread.meterreading.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, UUID> {
+
+    Optional<User> findByKeycloakSub(String keycloakSub);
+
+    boolean existsByKeycloakSub(String keycloakSub);
+
+    Optional<User> findByEmail(String email);
+
+}

@@ -1,0 +1,79 @@
+spring:
+  application:
+    name: meter-reading-service
+  config:
+    activate:
+      on-profile: docker
+
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/meterreading
+    username: meteruser
+    password: meterpass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info
+  endpoint:
+    health:
+      show-details: always
+
+keycloak:
+  url: http://localhost:8082
+  realm: meter-reading
+  client-id: meter-reading-app
+
+logging:
+  level:
+    root: INFO
+    com.utilread.meterreading: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/meterreading
+
+keycloak:
+  url: http://keycloak:8080
+
+logging:
+  level:
+    root: INFO
+    com.utilread.meterreading: INFO
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+  show-actuator: true
